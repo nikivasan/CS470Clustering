@@ -29,19 +29,28 @@ def main():
     xTrainAndVal, xTest, yTrainAndVal, yTest = model_selection.train_test_split(data, genres, train_size=0.9)
     xTrain, xValidate, yTrain, yValidate = model_selection.train_test_split(xTrainAndVal, yTrainAndVal, train_size=0.7)
     
-    # create clusters
-    print('Creating model..')
-    model = GenreClusterer()
-    print('Tuning parameters...')
+    # KMeans
+    print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+    print('Running kMeans..')
+    model = GenreClusterer('KMeans')
     bestK = model.find_parameters(xValidate, yValidate, v=True)
-    print('Optimal k was %s' % bestK)
-    print('Fitting model...')
+    print('Optimal parameters: %s' % bestK)
     model.fit(xTrain, yTrain)
     # print results
-    print('===============================================')
-    print('============= Cluster profiles ================')
-    print('===============================================')
+    print('==== Cluster profiles ===')
     model.displayClusters()
+
+    # DBScan
+    print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+    print('Running DBScan..')
+    model = GenreClusterer('DBScan')
+    bestK = model.find_parameters(xValidate, yValidate, v=True)
+    print('Optimal parameters: %s' % bestK)
+    model.fit(xTrain, yTrain)
+    # print results
+    print('==== Cluster profiles ===')
+    model.displayClusters()
+
     # recommender system
     ###
     print('Terminated successfully')
