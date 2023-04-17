@@ -10,52 +10,59 @@ from sklearn import model_selection
 def processData(filename):
     data = pd.read_csv(filename)
     genres = data['genre']
-    data.drop(labels=['genre','duration_ms','time_signature'], axis=1, inplace=True)         # needs to be left or reconverted to categorical
+    data.drop(labels=['genre','duration_ms','time_signature'], axis=1, inplace=True)   
     return data, genres
 
 
 # main
 def main():
     # get inputs
-    # parser = argparse.ArgumentParser()
-    # parser.add_argument(input,
-    #                     help='Name of input file')
-    # args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input",
+                        help='Name of input file')
+    args = parser.parse_args()
 
-    argsinput = r"C:\Users\david\Documents\GitHub\CS470FinalProject\David\temp_music_scaled.csv"  # fake input
-    dataPath = ''
     # process data table, get genre labels
-    data, genres = processData(argsinput)
-    xTrainAndVal, xTest, yTrainAndVal, yTest = model_selection.train_test_split(data, genres, train_size=0.9)
-    xTrain, xValidate, yTrain, yValidate = model_selection.train_test_split(xTrainAndVal, yTrainAndVal, train_size=0.7)
+    data, genres = processData(args.input)
+    # Training + Validation Data: xTrain = 63% | xValidate = 27%
+    xTrain, xValidate, yTrain, yValidate = model_selection.train_test_split(data, genres, train_size=0.7) 
     
     # KMeans
     print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++')
     print('Running kMeans..')
+    print('Finding optimal model parameters...')
     model = GenreClusterer('KMeans')
-    bestK = model.find_parameters(xValidate, yValidate, v=True)
-    print('Optimal parameters: %s' % bestK)
+    bestK, params = model.find_parameters(xValidate)
+    print('K-Values vs Silhouette Coefficients:')
+    print(params)
+    print('Optimal K: %s' %bestK[0])
+    print('Silhouette Score: %s' %bestK[1])
+    print('Training model with K value: %s' %bestK[0])
+    model.update(bestK[0])
     model.fit(xTrain, yTrain)
+
     # print results
     print('==== Cluster profiles ===')
     model.displayClusters()
 
-    # DBScan
+    # # DBScan
     print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++')
     print('Running DBScan..')
+    print('Finding optimal model parameters...')
     model = GenreClusterer('DBScan')
-    bestK = model.find_parameters(xValidate, yValidate, v=True)
-    print('Optimal parameters: %s' % bestK)
+    bestEps, params = model.find_parameters(xValidate)
+    print('Epsilon vs Silhouette Coefficients:')
+    print(params)
+    print('Optimal Epsilon: %s' %bestEps[0])
+    print('Silhouette Score: %s' %bestEps[1])
+    model.update(bestEps[0])
     model.fit(xTrain, yTrain)
+    
     # print results
     print('==== Cluster profiles ===')
     model.displayClusters()
 
-    # recommender system
-    ###
     print('Terminated successfully')
-
-
 
 
 if __name__ == '__main__':
