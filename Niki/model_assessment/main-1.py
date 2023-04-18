@@ -5,6 +5,8 @@ import pandas as pd
 import argparse
 from sklearn import model_selection
 from sklearn import metrics
+import seaborn as sns
+import matplotlib.pyplot as plt
 
 
 # function to process data
@@ -23,6 +25,10 @@ def main():
                         help='Name of input file')
     args = parser.parse_args()
 
+    # determine clusterability of the data
+    pairwisePlots(args.input)
+    
+    
     # process data table, get genre labels
     data, genres = processData(args.input)
     # Training + Validation Data: xTrain = 63% | xValidate = 27%
@@ -43,7 +49,7 @@ def main():
     model.update(bestK[0])
     yHat = model.fit(xTrain)
 
-    # visualize PCA
+    # visualize PCA plot 
     model.plot_components(xTrain)
 
     # print results
@@ -65,6 +71,9 @@ def main():
     model.update(bestEps[0])
     yHat = model.fit(xTrain)
     print('Silhouette Score: %.4f' % metrics.silhouette_score(xTrain, yHat))
+
+    # visualize PCA plot
+    model.plot_components(xTrain)
     
     # print results
     print('==== Cluster profiles ===')
