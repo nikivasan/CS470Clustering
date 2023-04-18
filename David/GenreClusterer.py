@@ -1,4 +1,5 @@
 ## Made by David Gaviria    April 13, 2023 ##
+## Edits and Add Ons by Niki Vasan ##
 
 from sklearn import model_selection
 from sklearn import cluster
@@ -6,6 +7,8 @@ from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score
 from clusteval import clusteval
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 ## Grouping class for clusters used by GenreClusterer
@@ -66,24 +69,33 @@ class GenreClusterer:
     # tune optimal parameters for model
     def find_parameters(self, xValidate):
         if self.modelType =='KMeans':
+            # evaluate using silhouette coef
             ce = clusteval(evaluate='silhouette')
             out = ce.fit(xValidate)
+            # create df to store k-values + silhouette coef
             param_df = pd.DataFrame(out['score'])
             param_df = param_df.drop(columns=['cluster_threshold'])
             max_score = max(param_df['score'])
+            # find best k value 
             bestK = int(param_df.loc[param_df['score'] == max_score]['clusters'])
+            # return best k value and corresponding silhouette score
             bestParameters = [bestK, round(max_score,3)]
             ce.plot()
         else:
+            # evaluate using 'DBSCAN' eval
             ce = clusteval(cluster='dbscan', max_clust=25)
             out = ce.fit(xValidate)
+            # store info on clusters, episolon and silhouette coef
             clusters = out['fig']['sillclust']
             eps = out['fig']['eps']
             sil_scores = out['fig']['silscores']
+            # create dataframe to store params + silhouette coef
             param_df = pd.DataFrame({'n_clusters':clusters, 'Epsilon':eps, 'Silhouette Score':sil_scores})
             param_df = param_df.sort_values(by=['n_clusters', 'Epsilon'])
             max_score = max(param_df['Silhouette Score'])
+            # find best epislon value
             bestEps = round(min(param_df.loc[param_df['Silhouette Score'] == max_score]['Epsilon']),3)
+            # return best epsiolon value and corresponding silhouette score
             bestParameters = [bestEps, round(max_score,3)]
             ce.plot()
         return bestParameters, param_df
@@ -115,13 +127,25 @@ class GenreClusterer:
             thisCluster = self.clusters[clusterId]
             print("<Cluster %s>(%s)" % (thisCluster._id, thisCluster.profile))
 
-    # TODO: display first two principal components of clustering
+    # display first two principal components of clustering
     def plot_components(self, xTrain):
-        n = len(xTrain.columns)
-        pca = PCA(n_components=n)
+        # get components
+        pca = PCA(n_components=2)
+        xTrainPCA = pca.fit_transform(xTrain)
+        df = pd.concat([xTrain.reset_index(drop=True), pd.DataFrame(xTrainPCA)], axis=1)
+        df['Labels'] = self.model.labels_
+        df = df.rename(columns={0:'Component 1', 1:'Component 2'})
         
+        # plot clusters
+        x_axis = df['Component 1']
+        y_axis = df['Component 2']
+        color = df['Labels']
 
-        return None
+        plt.figure(figsize=(10,8))
+        sns.scatterplot(x_axis, y_axis, hue=color )
+        plt.title('Clusters by PCA Components')
+        plt.show()
+        
 
             
 

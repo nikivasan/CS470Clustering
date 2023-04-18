@@ -41,26 +41,28 @@ def main():
     model.update(bestK[0])
     model.fit(xTrain, yTrain)
 
-    # print results
-    print('==== Cluster profiles ===')
-    model.displayClusters()
+    model.plot_components(xTrain)
 
-    # # DBScan
-    print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-    print('Running DBScan..')
-    print('Finding optimal model parameters...')
-    model = GenreClusterer('DBScan')
-    bestEps, params = model.find_parameters(xValidate)
-    print('Epsilon vs Silhouette Coefficients:')
-    print(params)
-    print('Optimal Epsilon: %s' %bestEps[0])
-    print('Silhouette Score: %s' %bestEps[1])
-    model.update(bestEps[0])
-    model.fit(xTrain, yTrain)
+    # # print results
+    # print('==== Cluster profiles ===')
+    # model.displayClusters()
+
+    # # # DBScan
+    # print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++')
+    # print('Running DBScan..')
+    # print('Finding optimal model parameters...')
+    # model = GenreClusterer('DBScan')
+    # bestEps, params = model.find_parameters(xValidate)
+    # print('Epsilon vs Silhouette Coefficients:')
+    # print(params)
+    # print('Optimal Epsilon: %s' %bestEps[0])
+    # print('Silhouette Score: %s' %bestEps[1])
+    # model.update(bestEps[0])
+    # model.fit(xTrain, yTrain)
     
-    # print results
-    print('==== Cluster profiles ===')
-    model.displayClusters()
+    # # print results
+    # print('==== Cluster profiles ===')
+    # model.displayClusters()
 
     print('Terminated successfully')
 
