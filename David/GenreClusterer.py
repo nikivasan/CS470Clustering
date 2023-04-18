@@ -17,19 +17,20 @@ class Grouping:
     # init
     def __init__(self, _id):
         self._id = _id
-        self.composition = dict()
-        self.profile = []
-        self.size = 0
+        self.composition = dict()       # stores the genres and a list of points belonging to said genre in the cluster
+        self.profile = []               # stores tuples of the genre and percentage of cluster belonging to said genre
+        self.size = 0                   # total points in cluster
 
-    # add sample to profile
-    def insert(self, sample, genre):
+    # add sample to composition
+    def insert(self, genre, sample=1):
         if genre not in self.composition:
-            self.composition[genre] = []  #insert corresponding point
+            self.composition[genre] = []    
+        #insert corresponding point
         genreSlot = self.composition[genre]
         genreSlot.append(sample)
         self.size += 1
 
-    # sort profile
+    # draws up profile of cluster
     def computeProfile(self):
         otherPercentage = 0
         for genre in self.composition:
@@ -43,6 +44,8 @@ class Grouping:
         # add other percentage to make percentages = 1
         self.profile.append(('other', otherPercentage))     
         self.profile.sort(key = lambda x:x[1], reverse=True)
+
+
 
 ## GenreClusterer class
 class GenreClusterer:
@@ -60,12 +63,14 @@ class GenreClusterer:
         else:
             raise Exception("Invalid model type, accepted models are 'KMeans' and 'DBScan'")
     
+    # % written by niki %
     def update(self, param):
         if self.model == 'KMeans':
             self.model = cluster.KMeans(init='k-means++', n_clusters=param)
         else:
             self.model = cluster.DBSCAN(eps=param)
 
+    # % written by niki %
     # tune optimal parameters for model
     def find_parameters(self, xValidate):
         if self.modelType =='KMeans':
@@ -100,26 +105,30 @@ class GenreClusterer:
             ce.plot()
         return bestParameters, param_df
 
-    # fit model
-    def fit(self, xTrain, yTrain):
-        # create clusters 
+    # fits the model
+    def fit(self, xTrain):   
         self.model.fit(xTrain)
-        nLabels = self.model.labels_
+        return self.model.labels_
+        
+    # generates cluster profiles based off predicted cluster labels and actual genre labels
+    def generateClusterProfiles(self, yHat, genreLabels):
         # build cluster profiles 
-        for i in range(len(nLabels)):
-            sampleIndex = xTrain.iloc[i]  
-            thisGenre = yTrain.iloc[i]
-            clusterId = nLabels[i]
+        for i in range(len(yHat)):
+            #sample = xTrain.iloc[i]  
+            thisGenre = genreLabels.iloc[i]
+            clusterId = yHat[i]
             # get cluster
             if clusterId not in self.clusters:
                 self.clusters[clusterId] = Grouping(_id=i)
             thisCluster = self.clusters[clusterId] 
             # insert into cluster
-            thisCluster.insert(sampleIndex, thisGenre)
+            thisCluster.insert(thisGenre)
         # compute the stats of the clusters
         for clusterId in self.clusters:
             thisCluster = self.clusters[clusterId]
             thisCluster.computeProfile()
+
+
 
     # print out clusters
     def displayClusters(self):
@@ -127,25 +136,13 @@ class GenreClusterer:
             thisCluster = self.clusters[clusterId]
             print("<Cluster %s>(%s)" % (thisCluster._id, thisCluster.profile))
 
-    # display first two principal components of clustering
+    # TODO: display first two principal components of clustering
     def plot_components(self, xTrain):
-        # get components
-        pca = PCA(n_components=2)
-        xTrainPCA = pca.fit_transform(xTrain)
-        df = pd.concat([xTrain.reset_index(drop=True), pd.DataFrame(xTrainPCA)], axis=1)
-        df['Labels'] = self.model.labels_
-        df = df.rename(columns={0:'Component 1', 1:'Component 2'})
+        n = len(xTrain.columns)
+        pca = PCA(n_components=n)
         
-        # plot clusters
-        x_axis = df['Component 1']
-        y_axis = df['Component 2']
-        color = df['Labels']
 
-        plt.figure(figsize=(10,8))
-        sns.scatterplot(x_axis, y_axis, hue=color )
-        plt.title('Clusters by PCA Components')
-        plt.show()
-        
+        return None
 
             
 
