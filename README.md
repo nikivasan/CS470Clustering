@@ -12,7 +12,7 @@ This repository contains the code and files from our CS470 Data Mining course fi
 ### Repo Structure
 * **data_preprocessing**: contains original and preprocessed datasets as well as the notebooks used for pre-processing
 * **model**: contains code used to build, run and evaluate model
-* **assessment**: plots and code used to evaluate model
+* **assessment**: plots and code used to evaluate model 
 * **reports**: contains our written report (in pdf form with Latex source code) and slide deck
 
 ### Relevant Links and Info
