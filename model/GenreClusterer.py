@@ -1,7 +1,7 @@
 ## Made by David Gaviria    April 13, 2023 ##
 ## Edits and Add Ons by Niki Vasan ##
 
-from sklearn import model_selection
+from collections import Counter
 from sklearn import cluster
 from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score
@@ -58,7 +58,7 @@ class GenreClusterer:
             self.model = cluster.KMeans(init='k-means++')
             self.modelType = 'KMeans'
         elif model == 'DBScan':
-            self.model = cluster.DBSCAN()
+            self.model = cluster.DBSCAN(min_samples=10)
             self.modelType = 'DBScan'
         else:
             raise Exception("Invalid model type, accepted models are 'KMeans' and 'DBScan'")
@@ -154,7 +154,3 @@ class GenreClusterer:
         sns.scatterplot(x_axis, y_axis, hue=color )
         plt.title('Clusters by PCA Components')
         plt.show()
-        
-
-            
-
