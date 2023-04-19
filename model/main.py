@@ -1,4 +1,5 @@
 ## Made by David Gaviria    April 13, 2023 ##
+## Edits and Add Ons by Niki Vasan ##
 
 from GenreClusterer import GenreClusterer
 import pandas as pd
@@ -24,10 +25,6 @@ def main():
     parser.add_argument("input",
                         help='Name of input file')
     args = parser.parse_args()
-
-    # determine clusterability of the data
-    pairwisePlots(args.input)
-    
     
     # process data table, get genre labels
     data, genres = processData(args.input)
