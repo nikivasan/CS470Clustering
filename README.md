@@ -1,5 +1,5 @@
 # CS470FinalProject
-** By Niki Vasan, David Gaviria, Gianluis Hernandez**
+**By Niki Vasan, David Gaviria, Gianluis Hernandez**
 
 ### Introduction
 This repository contains the code and files from our CS470 Data Mining course final project. The goal of the project was to work collaboratively in teams to apply data mining techniques to real-world tasks. Our group's goal was to cluster Spotify song data based on quantitative attributes and then compare the genre profiles of each cluster. We had three main deliverables:
