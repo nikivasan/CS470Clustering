@@ -7,7 +7,7 @@
 This repository contains the code and files from our CS470 Data Mining course final project. The goal of the project was to work collaboratively in teams to apply data mining techniques to real-world tasks. Our group's goal was to cluster Spotify song data based on quantitative attributes and then compare the genre profiles of each cluster. We had three main deliverables:
 1. Code Repository: Train, and evaluate model, push code + relevant files to github repository 
 2. Final Presentation: 5 minute presentation explaining model design, evaluation and results
-3. Report: 10+ paged report detailing problem statement, data description, methods, results and key findings of our project
+3. Report: report detailing problem statement, data description, methods, results and key findings of our project
 
 ### Repo Structure
 * **data_preprocessing**: contains original and preprocessed datasets as well as the notebooks used for pre-processing
@@ -20,4 +20,4 @@ To run our code, navigate to the [model](https://github.com/nikivasan/CS470Final
 
 Click [here](https://www.kaggle.com/datasets/mrmorj/dataset-of-songs-in-spotify?resource=download) to download the dataset we used, or download the data directly from our [repo](https://github.com/nikivasan/CS470FinalProject/tree/main/data_preprocessing/original_datasets). 
 
-To watch our presentation, click **here** <INSERT LINK>. 
+To watch our presentation, click **<INSERT LINK>**. 
