@@ -18,6 +18,6 @@ This repository contains the code and files from our CS470 Data Mining course fi
 ### Relevant Links and Info
 To run our code, navigate to the [model](https://github.com/nikivasan/CS470FinalProject/tree/main/model) directory, and run the `main.py` file by typing `python main.py genre_processed_v2.csv.` This will run both K-Means and DB-Scan with pre-selected optimal parameters. 
 
-Click [here](https://www.kaggle.com/datasets/mrmorj/dataset-of-songs-in-spotify?resource=download) to download the dataset we used, or download the data directly from our [repo] (https://github.com/nikivasan/CS470FinalProject/tree/main/data_preprocessing/original_datasets). 
+Click [here](https://www.kaggle.com/datasets/mrmorj/dataset-of-songs-in-spotify?resource=download) to download the dataset we used, or download the data directly from our [repo](https://github.com/nikivasan/CS470FinalProject/tree/main/data_preprocessing/original_datasets). 
 
 To watch our presentation, click **here** <INSERT LINK>. 
