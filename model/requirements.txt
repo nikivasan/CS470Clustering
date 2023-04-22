@@ -1,0 +1,7 @@
+pandas
+sklearn
+argparse
+seaborn
+pyclustertend
+matplotlib
+warnings
