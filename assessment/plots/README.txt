@@ -7,4 +7,5 @@ model on the first two principal components of the input data.
 * Run2 is on a subset data (genres = Rap/RnB, attributes = tempo, liveness)
 
 The pairwise plots folders are scatterplots demonstrating the relationship between all combinations of attributes 
-in the original data, with different subsets of genres.
+in the original data, with different subsets of genres. The pre-processing folder contains all the plots relating
+to data exploration and pre-processing.
