@@ -1,14 +1,17 @@
-## Made by David Gaviria    April 13, 2023 ##
-## Edits and Add Ons by Niki Vasan ##
+## Made by David Gaviria and Niki Vasan   April 13, 2023 ##
 
 from GenreClusterer import GenreClusterer
-import numpy as np
 import pandas as pd
 import argparse
 from sklearn import model_selection
 from sklearn import metrics
 import seaborn as sns
 import matplotlib.pyplot as plt
+from pyclustertend import hopkins
+from sklearn.decomposition import PCA
+import warnings
+
+warnings.filterwarnings("ignore")
 
 
 # function to process data
@@ -17,6 +20,29 @@ def processData(filename):
     genres = data['genre']
     data.drop(labels=['genre','duration_ms','time_signature'], axis=1, inplace=True)   
     return data, genres
+
+def hopkinsStat(data):
+    hopkins_stat = hopkins(data, data.shape[0])
+    return round(hopkins_stat,5)
+
+# function to visualize data
+def plotData(data, genres):
+    # get components
+    pca = PCA(n_components=2)
+    xTrainPCA = pca.fit_transform(data)
+    df = pd.concat([data.reset_index(drop=True), pd.DataFrame(xTrainPCA)], axis=1)
+    df['Labels'] = genres
+    df = df.rename(columns={0:'Component 1', 1:'Component 2'})
+    
+    # plot data
+    x_axis = df['Component 1']
+    y_axis = df['Component 2']
+    color = df['Labels']
+
+    plt.figure(figsize=(10,8))
+    sns.scatterplot(x_axis, y_axis, hue=color )
+    plt.title('PCA: Genres')
+    plt.show()
 
 
 # main
@@ -40,8 +66,14 @@ def main():
     # process data table, get genre labels
     data, genres = processData(args.input)
 
-    # Training + Validation Data: xTrain = 63% | xValidate = 27%
-    xTrain, xValidate, yTrain, yValidate = model_selection.train_test_split(data, genres, train_size=0.9) 
+    # check clustering tendency using hopkin's statistic
+    print('Hopkin\'s Statistic: ', hopkinsStat(data))
+
+    # visualize data
+    plotData(data, genres)
+
+    # Training + Validation Data: xTrain = 70% | xValidate = 30%
+    xTrain, xValidate, yTrain, yValidate = model_selection.train_test_split(data, genres, train_size=0.7) 
     
     # KMeans
     print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++')
@@ -76,8 +108,6 @@ def main():
     print('Epsilon vs Silhouette Coefficients:')
     print(params)
     print('Optimal Epsilon: %s' %bestEps[0])
-
-    
     # cluster
     model.update(bestEps[0])
     yHat = model.fit(xTrain)
@@ -87,9 +117,9 @@ def main():
     # visualize PCA plot
     model.plot_components(xTrain)
     
-    # # print results
-    # print('==== Cluster profiles ===')
-    # model.displayClusters()
+    # print results
+    print('==== Cluster profiles ===')
+    model.displayClusters()
 
     print('Terminated successfully')
 
