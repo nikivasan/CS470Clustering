@@ -1,4 +1,4 @@
-This repo is organized into three main folders. DBSCAN and KMEANS hold the plots specific to each model. 
+This folder is organized into three sub-directories. DBSCAN and KMEANS hold the plots specific to each model. 
 
 There are two kinds of plots for each model - one is a line graph indicating the optimal number of clusters
 with respect to the model's parameters, and the other is a scatterplot visualizing the cluster outputs for each
