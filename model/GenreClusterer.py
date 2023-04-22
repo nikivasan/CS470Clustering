@@ -87,6 +87,7 @@ class GenreClusterer:
             bestParameters = [bestK, round(max_score,3)]
             ce.plot()
         else:
+        ## --- CLUSTEREVAL APPROACH --- ###
             # evaluate using 'DBSCAN' eval
             ce = clusteval(cluster='dbscan', max_clust=25)
             out = ce.fit(xValidate)
@@ -103,9 +104,34 @@ class GenreClusterer:
             # return best epsiolon value and corresponding silhouette score
             bestParameters = [bestEps, round(max_score,3)]
             ce.plot()
+        ## --- MANUAL APPROACH --- ###
+            # eps_params = [1, 1.2, 1.4, 1.6, 1.8, 2, 2.2, 2.4, 2.6, 2.8, 3, 3.2, 3.4, 3.6, 3.8, 4, 4.2, 4.4]
+            # minSample_params = [3, 5, 8, 10, 15, 20, 25, 30, 40, 50, 75, 100]
+            # stats = []
+            # # try all combos of eps and min samples
+            # for eps in eps_params:
+            #     sample_stats = []
+            #     for n_samples in minSample_params:
+            #         tester = cluster.DBSCAN(eps=eps, min_samples=n_samples)
+            #         tester.fit(xValidate)
+            #         try:
+            #             score = silhouette_score(xValidate, tester.labels_)
+            #         except:
+            #             score = -1
+            #         sample_stats.append((n_samples, score))
+            #     # add the min sample with the highest score for this eps to stats
+            #     bestMinSample, bestScore = max(sample_stats, key = lambda x:x[1])
+            #     newStat = (eps, bestMinSample, bestScore)
+            #     print(str(newStat))
+            #     stats.append(newStat)
+            # # find the best overall combo
+            # bestEps, bestMinSample, bestScore = max(stats, key = lambda x:x[2])
+            # bestParameters = {'eps':bestEps, 'n_sample':bestMinSample}
+            # # create data frame to store info that niki wants
+            # param_df = pd.DataFrame(stats, columns=['Epsilon','n_clusters','Silhouette Score'])
+        ## --- -------------- --- ###
         return bestParameters, param_df
-
-
+    
    # fits the model
     def fit(self, xTrain):   
         self.model.fit(xTrain)
