@@ -7,7 +7,7 @@ from sklearn import model_selection
 from sklearn import metrics
 import seaborn as sns
 import matplotlib.pyplot as plt
-#from pyclustertend import hopkins
+from pyclustertend import hopkins
 from sklearn.decomposition import PCA
 import warnings
 
@@ -21,9 +21,9 @@ def processData(filename):
     data.drop(labels=['genre','duration_ms','time_signature'], axis=1, inplace=True)   
     return data, genres
 
-# def hopkinsStat(data):
-#     hopkins_stat = hopkins(data, data.shape[0])
-#     return round(hopkins_stat,5)
+def hopkinsStat(data):
+    hopkins_stat = hopkins(data, data.shape[0])
+    return round(hopkins_stat,5)
 
 # function to visualize data
 def plotData(data, genres):
@@ -64,16 +64,14 @@ def main():
     # ++++++++++++++++++++++++++++++++++++++++++++++++ #
     
     # process data table, get genre labels
-    #data, genres = processData(args.input)
-    filename = r"C:\Users\david\Documents\GitHub\CS470FinalProject\model\genre_processed_v2.csv"
-    data, genres = processData(filename)
+    data, genres = processData(args.input)
     print('genre: %s' % genres)
 
     # check clustering tendency using hopkin's statistic
-    # print('Hopkin\'s Statistic: ', hopkinsStat(data))
+    print('Hopkin\'s Statistic: ', hopkinsStat(data))
 
     # visualize data
-    # plotData(data, genres)
+    plotData(data, genres)
 
     # Training + Validation Data: xTrain = 70% | xValidate = 30%
     xTrain, xValidate, yTrain, yValidate = model_selection.train_test_split(data, genres, train_size=0.8) 
@@ -94,7 +92,7 @@ def main():
     yHat = model.fit(xTrain)
 
     # visualize PCA plot 
-    #model.plot_components(xTrain)
+    model.plot_components(xTrain)
 
     # print results
     print('==== Cluster profiles ===')
@@ -118,7 +116,7 @@ def main():
     print('Silhouette Score: %.4f' % metrics.silhouette_score(xTrain, yHat))
 
     # visualize PCA plot
-    # model.plot_components(xTrain)
+    model.plot_components(xTrain)
     
     # print results
     print('==== Cluster profiles ===')
