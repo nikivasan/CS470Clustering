@@ -13,7 +13,8 @@ This repository contains the code and files from our CS470 Data Mining course fi
 * **data_preprocessing**: contains original and preprocessed datasets as well as the notebooks used for pre-processing
 * **model**: contains code used to build and run model
 * **assessment**: plots and code used to evaluate model 
-* **reports**: contains our written report (in pdf form with Latex source code) and slide deck
+* **reports**: contains our written report (in pdf form with Latex source code) 
+* **slides**: contains our slide deck (pdf) along with link to video recording
 
 ### Relevant Links and Info
 To run our code, navigate to the [model](https://github.com/nikivasan/CS470FinalProject/tree/main/model) directory, and run the `main.py` file by typing `python main.py genre_processed_v2.csv.` This will run both K-Means and DB-Scan with pre-selected optimal parameters. 
