@@ -64,19 +64,21 @@ def main():
     # ++++++++++++++++++++++++++++++++++++++++++++++++ #
     
     # process data table, get genre labels
-    data, genres = processData(args.input)
+    #data, genres = processData(args.input)
+    filename = r"C:\Users\david\Documents\GitHub\CS470FinalProject\model\genre_processed_v2.csv"
+    data, genres = processData(filename)
     print('genre: %s' % genres)
 
     # check clustering tendency using hopkin's statistic
-    #print('Hopkin\'s Statistic: ', hopkinsStat(data))
+    # print('Hopkin\'s Statistic: ', hopkinsStat(data))
 
     # visualize data
-    #plotData(data, genres)
+    # plotData(data, genres)
 
     # Training + Validation Data: xTrain = 70% | xValidate = 30%
-    xTrain, xValidate, yTrain, yValidate = model_selection.train_test_split(data, genres, train_size=0.7) 
+    xTrain, xValidate, yTrain, yValidate = model_selection.train_test_split(data, genres, train_size=0.8) 
     
-    # KMeans
+    # # KMeans
     print('\n++++++++++++++++++++++++++++++++++++++++++++++++++++++')
     print('Running kMeans..')
     print('Finding optimal model parameters...')
@@ -116,7 +118,7 @@ def main():
     print('Silhouette Score: %.4f' % metrics.silhouette_score(xTrain, yHat))
 
     # visualize PCA plot
-    #model.plot_components(xTrain)
+    # model.plot_components(xTrain)
     
     # print results
     print('==== Cluster profiles ===')
